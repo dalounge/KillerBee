@@ -1,7 +1,7 @@
 import csv
 
 
-with open('WW Price List-InTouch.csv', 'r', encoding="ANSI") as pricing:
+with open('WW Price List-InTouch.csv', 'r', encoding='ansi') as pricing:
     wwlist = csv.reader(pricing)
 
     priceList_list = []
@@ -21,7 +21,9 @@ with open('WW Price List-InTouch.csv', 'r', encoding="ANSI") as pricing:
            start_tracking = True
            continue
         
-        if start_tracking == True:
+        if start_tracking:
+
+            ## List form
             priceList_list.append([
                 row[partNum_idx], # Part No
                 row[listPrice_idx], # Original Price
@@ -35,5 +37,6 @@ with open('WW Price List-InTouch.csv', 'r', encoding="ANSI") as pricing:
             priceList_dict[row[partNum_idx]]['NewPrice'] = row[newListPrice_idx] # New Price
 
     print(priceList_list)
+    print('\n')
     print(priceList_dict)
     
