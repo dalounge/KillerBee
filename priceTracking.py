@@ -1,8 +1,13 @@
 import csv
+
+
 with open('WW Price List-InTouch.csv', 'r', encoding="ANSI") as pricing:
     wwlist = csv.reader(pricing)
 
-    price_list = []
+    priceList_list = []
+    priceList_dict = {}
+
+    ## This is not required, just showing
     partNum_idx = None
     listPrice_idx = None
     newListPrice_idx = None
@@ -14,8 +19,21 @@ with open('WW Price List-InTouch.csv', 'r', encoding="ANSI") as pricing:
            listPrice_idx = row.index('listprice')
            newListPrice_idx = listPrice_idx + 1
            start_tracking = True
+           continue
         
         if start_tracking == True:
-            price_list.append([row[partNum_idx], row[listPrice_idx], row[newListPrice_idx]])
+            priceList_list.append([
+                row[partNum_idx], # Part No
+                row[listPrice_idx], # Original Price
+                row[newListPrice_idx] # New Price
+                ])
 
-    print(price_list)
+            ## Dictionary form
+            priceList_dict[row[partNum_idx]] = row[partNum_idx] # Part No
+            priceList_dict[row[partNum_idx]] = {} # Nest Dictionary for new keys
+            priceList_dict[row[partNum_idx]]['ListPrice'] = row[listPrice_idx] # Original Price
+            priceList_dict[row[partNum_idx]]['NewPrice'] = row[newListPrice_idx] # New Price
+
+    print(priceList_list)
+    print(priceList_dict)
+    
