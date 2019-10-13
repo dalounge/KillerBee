@@ -24,21 +24,18 @@ namespace MusicGenerator
 
             foreach (var band in directories)
             {
-                // Read last part of array instead of selecting the position
                 string bandName = band.Split("\\")[band.Split("\\").Length - 1];
                 bandAlbums.Add(bandName, new AlbumDisco());
                 string[] albumPath = Directory.GetDirectories(band);
 
                 foreach (var album in albumPath)
                 {
-                    // Read last part of array instead of selecting the position
                     string albumName = album.Split("\\")[album.Split("\\").Length - 1];
                     bandAlbums[bandName].discography.Add(albumName, new List<string>());
                     string[] songPath = Directory.GetFiles(album);
 
                     foreach(var songs in songPath)
                     {
-                        // Read last part of array instead of selecting the position
                         string song = songs.Split("\\")[songs.Split("\\").Length - 1];
                         bandAlbums[bandName].discography[albumName].Add(song);
                     }
