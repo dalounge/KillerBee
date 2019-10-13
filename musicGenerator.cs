@@ -17,7 +17,7 @@ namespace MusicGenerator
 
     class ReadDirectories
     {
-        public Dictionary<string, Dictionary<string, List<string>>> bandAlbums = new Dictionary<string, Dictionary<string, List<string>>>();
+        public Dictionary<string, AlbumDisco> bandAlbums = new Dictionary<string, AlbumDisco>();
         public ReadDirectories(string path)
         {
             string[] directories = Directory.GetDirectories(path);
@@ -25,40 +25,46 @@ namespace MusicGenerator
             foreach (var band in directories)
             {
                 // Read last part of array instead of selecting the position
-                string bandName = band.Split("\\")[2];
-                bandAlbums.Add(bandName, new Dictionary<string, List<string>>());
+                string bandName = band.Split("\\")[band.Split("\\").Length - 1];
+                bandAlbums.Add(bandName, new AlbumDisco());
                 string[] albumPath = Directory.GetDirectories(band);
 
                 foreach (var album in albumPath)
                 {
                     // Read last part of array instead of selecting the position
-                    string albumName = album.Split("\\")[3];
-                    bandAlbums[bandName].Add(albumName, new List<string>());
+                    string albumName = album.Split("\\")[album.Split("\\").Length - 1];
+                    bandAlbums[bandName].discography.Add(albumName, new List<string>());
                     string[] songPath = Directory.GetFiles(album);
 
                     foreach(var songs in songPath)
                     {
                         // Read last part of array instead of selecting the position
-                        string song = songs.Split("\\")[4];
-                        bandAlbums[bandName][albumName].Add(song);
+                        string song = songs.Split("\\")[songs.Split("\\").Length - 1];
+                        bandAlbums[bandName].discography[albumName].Add(song);
                     }
                 }
             }
         }
     }
 
+    class AlbumDisco
+    {
+        // Object to contain album and songs
+        public Dictionary<string, List<string>> discography = new Dictionary<string, List<string>>();
+    }
+
     class CsvClass
     {
-        public void CsvWriter(Dictionary<string, Dictionary<string, List<string>>> data)
+        public void CsvWriter(Dictionary<string, AlbumDisco> data)
         {
             using (var w = new StreamWriter(@"C:\MusicGenerator\music.csv"))
             using (var csv = new CsvWriter(w))
             {
                 foreach (var b in data.Keys)
                 {
-                    foreach (var a in data[b].Keys)
+                    foreach (var a in data[b].discography.Keys)
                     {
-                        foreach (var s in data[b][a])
+                        foreach (var s in data[b].discography[a])
                         {
                             csv.WriteField(b);
                             csv.WriteField(a);
